@@ -62,18 +62,13 @@
           <div>
             <h4>My Restaurants</h4>
             <ul class="list-group" id="restaurantItinerary">
-              <div class="itinerary-item">
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-              </div>
+
             </ul>
           </div>
           <div>
             <h4>My Activities</h4>
             <ul class="list-group" id="activityItinerary">
-              <div class="itinerary-item">
 
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-              </div>
             </ul>
           </div>
         </div>
@@ -86,6 +81,8 @@
   var hotels = {{ hotels | dump | safe }};
   var restaurants = {{ restaurants | dump | safe }};
   var activities = {{ activities | dump | safe }};
+
+  var map = initializeMap()
 
   $(document).ready(function() {
     $.each(hotels, function(key, value) {
@@ -107,18 +104,43 @@
               .text(value.name));
     });
 
+
+
     $('#hotel-choices').siblings('.btn').click(function(){
       var html = '<div class="itinerary-item">' +
                 '<span class="title">' + hotels[$('#hotel-choices').val()].name + '</span>' +
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#hotelItinerary').append(html);
+      console.log(hotels[$('#hotel-choices').val()].place.location)
+
+
+    drawMarker(map, 'hotel', hotels[$('#hotel-choices').val()].place.location);
     });
 
-    
-  });
-  
+    $('#restaurant-choices').siblings('.btn').click(function(){
+      var html = '<div class="itinerary-item">' +
+                '<span class="title">' + restaurants[$('#restaurant-choices').val()].name + '</span>' +
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>'
+      $('#restaurantItinerary').append(html);
+      drawMarker(map, 'restaurant', restaurants[$('#restaurant-choices').val()].place.location);
 
-  
+    });
+
+    $('#activity-choices').siblings('.btn').click(function(){
+      var html = '<div class="itinerary-item">' +
+                '<span class="title">' + activities[$('#activity-choices').val()].name + '</span>' +
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>'
+      $('#activityItinerary').append(html);
+      drawMarker(map, 'activity', activities[$('#activity-choices').val()].place.location);
+    });
+
+
+  });
+
+
+
 </script>
 {% endblock %}
