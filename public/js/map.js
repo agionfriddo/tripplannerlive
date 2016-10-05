@@ -52,6 +52,8 @@ return currentMap;
 
 }
 
+var markers = []
+
 function drawMarker (map, type, coords) {
     var iconURLs = {
       hotel: '/images/lodging_0star.png',
@@ -62,7 +64,18 @@ function drawMarker (map, type, coords) {
     var iconURL = iconURLs[type];
     var marker = new google.maps.Marker({
       icon: iconURL,
-      position: latLng
+      position: latLng,
+      type: type,
+      coords: coords
     });
     marker.setMap(map);
+    markers.push(marker);
   }
+
+function removeMarker (map, type, coords) {
+  for(var i = 0; i < markers.length; i++) {
+    if(type === markers[i].type && coords.toString() === markers[i].coords.toString()) {
+      markers[i].setMap(null);
+    }
+  }
+}

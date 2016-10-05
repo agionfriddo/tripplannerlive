@@ -82,7 +82,7 @@
   var restaurants = {{ restaurants | dump | safe }};
   var activities = {{ activities | dump | safe }};
 
-  var map = initializeMap()
+  var map = initializeMap();
 
   $(document).ready(function() {
     // adds all the hotels, restaurants, and activities to the menus
@@ -106,20 +106,19 @@
     });
 
 
-    // adds the hotel to the itinerary and map blue button is clicked
+    // adds the hotel to the itinerary and map when blue button is clicked
     $('#hotel-choices').siblings('.btn').click(function(){
-      var html = '<div class="itinerary-item">' +
+      var html = '<div class="itinerary-item" id=" ' + "hotel-" + $('#hotel-choices').val() + ' ">' +
                 '<span class="title">' + hotels[$('#hotel-choices').val()].name + '</span>' +
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#hotelItinerary').append(html);
-      console.log(hotels[$('#hotel-choices').val()].place.location)
     drawMarker(map, 'hotel', hotels[$('#hotel-choices').val()].place.location);
     });
 
-    // adds the restaurant to the itinerary and map blue button is clicked
+    // adds the restaurant to the itinerary and map when blue button is clicked
     $('#restaurant-choices').siblings('.btn').click(function(){
-      var html = '<div class="itinerary-item">' +
+      var html = '<div class="itinerary-item" id=" ' + "restaurant-" + $('#restaurant-choices').val() + ' ">' +
                 '<span class="title">' + restaurants[$('#restaurant-choices').val()].name + '</span>' +
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
@@ -127,15 +126,32 @@
       drawMarker(map, 'restaurant', restaurants[$('#restaurant-choices').val()].place.location);
     });
 
-    // adds the activity to the itinerary and map blue button is clicked
+    // adds the activity to the itinerary and map when blue button is clicked
     $('#activity-choices').siblings('.btn').click(function(){
-      var html = '<div class="itinerary-item">' +
+      var html = '<div class="itinerary-item" id=" ' + "activity-" + $('#activity-choices').val() + ' ">' +
                 '<span class="title">' + activities[$('#activity-choices').val()].name + '</span>' +
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#activityItinerary').append(html);
       drawMarker(map, 'activity', activities[$('#activity-choices').val()].place.location);
     });
+
+    $('#itinerary').on('click', '.remove', function() {
+      var elementID = $(this).parent().attr('id').split('-');
+      var type = elementID[0].trim();
+      var index = elementID[1].trim();
+      if(type === 'hotel') {
+        removeMarker(map, type, hotels[index].place.location);
+      }
+      else if(type === 'restaurant') {
+        removeMarker(map, type, restaurants[index].place.location);
+      }
+      else if(type === 'activity') {
+        removeMarker(map, type, activities[index].place.location);
+      }
+      $(this).parent().remove();
+      // removeMarker(map, $(this).siblings().val())
+    })
 
 
   });
