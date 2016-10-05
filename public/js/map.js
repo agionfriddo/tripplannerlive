@@ -70,6 +70,7 @@ function drawMarker (map, type, coords) {
     });
     marker.setMap(map);
     markers.push(marker);
+    return marker;
   }
 
 function removeMarker (map, type, coords) {
