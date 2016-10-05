@@ -80,3 +80,7 @@ function removeMarker (map, type, coords) {
     }
   }
 }
+
+function removeMark (marker) {
+  marker.setMap(null)
+}

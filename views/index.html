@@ -90,11 +90,46 @@
               }};
   var map = initializeMap();
 
+  var clearAll = function(day) {
+    days[day].markers.forEach(function(marker) {
+      removeMark(marker)
+    })
+    $('#hotelItinerary').empty()
+    $('#restaurantItinerary').empty()
+    $('#activityItinerary').empty()
+  }
+
+  var buildAll = function(day) {
+    clearAll(day);
+    days[day].hotels.forEach(function(hotel) {
+            var html = '<div class="itinerary-item" id=" ' + "hotel-" + hotel + ' ">' +
+                '<span class="title">' + hotels[hotel].name + '</span>' +
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>'
+      $('#hotelItinerary').append(html)
+    })
+    days[day].restaurants.forEach(function(restaurant) {
+            var html = '<div class="itinerary-item" id=" ' + "restaurant-" + restaurant + ' ">' +
+                '<span class="title">' + restaurants[restaurant].name + '</span>' +
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>'
+      $('#restaurantItinerary').append(html)
+    })
+    days[day].activities.forEach(function(activity) {
+            var html = '<div class="itinerary-item" id=" ' + "activity-" + activity + ' ">' +
+                '<span class="title">' + activities[activity].name + '</span>' +
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>'
+      $('#activityItinerary').append(html)
+    })
+
+  }
+
   $(document).ready(function() {
-    
-    
+
+
     console.log(days);
-    
+
     // adds all the hotels, restaurants, and activities to the menus
     $.each(hotels, function(key, value) {
       $('#hotel-choices')
@@ -123,10 +158,10 @@
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#hotelItinerary').append(html);
-      
+
        //Get the Active day use it as an index in Days Objejct - Push index of hotel we are looking for
        days[$('.day-buttons .active').text()].hotels.push($('#hotel-choices').val());
-      
+
        days[$('.day-buttons .active').text()].markers.push(drawMarker(map, 'hotel', hotels[$('#hotel-choices').val()].place.location));
     });
 
@@ -137,12 +172,11 @@
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#restaurantItinerary').append(html);
-      
+
       days[$('.day-buttons .active').text()].restaurants.push($('#restaurant-choices').val());
-      
       days[$('.day-buttons .active').text()].markers.push(drawMarker(map, 'restaurant', restaurants[$('#restaurant-choices').val()].place.location));
      // drawMarker(map, 'restaurant', restaurants[$('#restaurant-choices').val()].place.location);
-     
+
     });
 
     // adds the activity to the itinerary and map when blue button is clicked
@@ -152,10 +186,10 @@
                 '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
               '</div>'
       $('#activityItinerary').append(html);
-      
+
       days[$('.day-buttons .active').text()].activities.push($('#activity-choices').val());
       days[$('.day-buttons .active').text()].markers.push(drawMarker(map, 'activity', activities[$('#activity-choices').val()].place.location));
-      
+
       //drawMarker(map, 'activity', activities[$('#activity-choices').val()].place.location);
     });
 
@@ -176,21 +210,29 @@
       // removeMarker(map, $(this).siblings().val())
     })
 
-    
+
      //Day Planner functions....
      $('#day-add').on('click',function(){
         var newDay = (parseInt($(this).prev().text()) + 1);
         var html = '<button class="btn btn-circle day-btn">' + newDay + '</button>';
+
         $(this).before(html);
+        clearAll($('.day-buttons .active').text())
         $(this).siblings().removeClass('active');
         $(this).prev().addClass('active');
-        
+
         days[newDay] = {
                 hotels: [],
                 restaurants: [],
                 activities: [],
                 markers: []
               };
+     })
+
+     $('.day-buttons').on('click', '.day-btn:not(#day-add)', function() {
+      $(this).siblings().removeClass('active');
+      $(this).addClass('active');
+      buildAll($(this).text())
      })
 
   });
