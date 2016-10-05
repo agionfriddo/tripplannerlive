@@ -85,6 +85,7 @@
   var map = initializeMap()
 
   $(document).ready(function() {
+    // adds all the hotels, restaurants, and activities to the menus
     $.each(hotels, function(key, value) {
       $('#hotel-choices')
       .append($("<option></option>")
@@ -105,7 +106,7 @@
     });
 
 
-
+    // adds the hotel to the itinerary and map blue button is clicked
     $('#hotel-choices').siblings('.btn').click(function(){
       var html = '<div class="itinerary-item">' +
                 '<span class="title">' + hotels[$('#hotel-choices').val()].name + '</span>' +
@@ -113,11 +114,10 @@
               '</div>'
       $('#hotelItinerary').append(html);
       console.log(hotels[$('#hotel-choices').val()].place.location)
-
-
     drawMarker(map, 'hotel', hotels[$('#hotel-choices').val()].place.location);
     });
 
+    // adds the restaurant to the itinerary and map blue button is clicked
     $('#restaurant-choices').siblings('.btn').click(function(){
       var html = '<div class="itinerary-item">' +
                 '<span class="title">' + restaurants[$('#restaurant-choices').val()].name + '</span>' +
@@ -125,9 +125,9 @@
               '</div>'
       $('#restaurantItinerary').append(html);
       drawMarker(map, 'restaurant', restaurants[$('#restaurant-choices').val()].place.location);
-
     });
 
+    // adds the activity to the itinerary and map blue button is clicked
     $('#activity-choices').siblings('.btn').click(function(){
       var html = '<div class="itinerary-item">' +
                 '<span class="title">' + activities[$('#activity-choices').val()].name + '</span>' +
@@ -139,8 +139,6 @@
 
 
   });
-
-
 
 </script>
 {% endblock %}
